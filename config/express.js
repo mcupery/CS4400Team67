@@ -1,4 +1,4 @@
-
+//this is where we configure all the options for express.
 var express = require('express');
 
 module.exports = function() {
