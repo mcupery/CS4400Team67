@@ -1,4 +1,7 @@
 
 exports.render = function(req, res) {
-	res.send('Hello, World!');
+	//render the index.ejs template
+	res.render('index', {
+		title: 'Hello World!!!'
+	});
 };
