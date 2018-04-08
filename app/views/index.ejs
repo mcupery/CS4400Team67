@@ -8,7 +8,7 @@
 		<h1><%= title %></h1>
 		<h2><%= greeting %></h2>
 		<h3>Please log in:</h3>
-		<form action='/login' method='post'>
+		<form action='/' method='post'>
 			<div>
 				<label>Username:  </label>
 				<input type='text' name='username' />
@@ -22,13 +22,13 @@
 			</div>
 		</form>
 		<br />
-		<form action='/registerOwner'>
+		<form action='/register/owner' method='get'>
 			<div>
 				<input type='submit' name='registerowner' value='New Owner Registration' />
 			</div>
 		</form>
 		<p/>
-		<form action='/registerVisitor'>
+		<form action='/register/visitor' method='get'>
 			<div>
 				<input type='submit' name='registervisitor' value='New Visitor Registration' />
 			</div>
