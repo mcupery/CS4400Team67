@@ -6,5 +6,33 @@
 	<body>
 		<img src="img/logo.png" alt="Logo">
 		<h1><%= title %></h1>
+		<h2><%= greeting %></h2>
+		<h3>Please log in:</h3>
+		<form action='/login' method='post'>
+			<div>
+				<label>Username:  </label>
+				<input type='text' name='username' />
+			</div>
+			<div>
+				<label>Password:   </label>
+				<input type='password' name='password' />
+			</div>
+			<div>
+				<input type='submit' name='submitlogin' value='Login' />
+			</div>
+		</form>
+		<br />
+		<form action='/registerOwner'>
+			<div>
+				<input type='submit' name='registerowner' value='New Owner Registration' />
+			</div>
+		</form>
+		<p/>
+		<form action='/registerVisitor'>
+			<div>
+				<input type='submit' name='registervisitor' value='New Visitor Registration' />
+			</div>
+		</form>
+
 	</body>
 </html>
