@@ -34,7 +34,7 @@ module.exports = function() {
 	require('../app/routes/index.server.routes.js')(app);
 	require('../app/routes/user.server.routes.js')(app);
 	
-	app.use(express.static('./public')); //serve images, etc. from this folder
+	app.use('/public', express.static('public')); //serve images, etc. from this folder
 	
 	return app;
 };
