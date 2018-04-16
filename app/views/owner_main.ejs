@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<style>
+            .bg-1 { 
+        background-color: #1abc9c;
+        color: #ffffff;
+        }
+	    </style>
+		<title>Atlanta Community Gardens</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span> 
+            </button>
+        <a class="navbar-brand" href="#"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                </ul>
+            </div>
+            </div>
+        </nav>
+        <div class="container-fluid bg-1 text-center">
+            <h3>Atlanta Community Gardens</h3>	
+            <h3></h3>
+        </div>
+        <div class="container-fluid bg-1 text-center">
+            <h2>Welcome <%= username %></h2>
+            <p>Your Properties:</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Zip</th>
+                        <th>Size</th>
+                        <th>Type</th>
+                        <th>Public</th>
+                        <th>Commercial</th>
+                        <th>ID</th>
+                        <th>IsValid</th>
+                        <th>Visits</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% for (i = 0; i < properties.length; i+=1) { %>
+                    <tr>
+                        <% prow = properties[i]; %>
+                        <td><%= prow.name %></td>
+                        <td><%= prow.street %></td>
+                        <td><%= prow.city %></td>
+                        <td><%= prow.zip %></td>
+                        <td><%= prow.size %></td>
+                        <td><%= prow.property_type %></td>
+                        <td><%= prow.is_public %></td>
+                        <td><%= prow.is_commercial %></td>
+                        <td><%= prow.id %></td>
+                        <td><%= prow.is_approved %></td>
+                        <td><%= prow.visits %></td>
+                        <td><%= prow.rating %></td>
+                    </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
+                <select class="form-control" id="sel_searchattribute" name="searchattribute">
+                    <option>Name</option>  
+                    <option>Street</option>
+                    <option>City</option>
+                    <option>Zip</option>
+                    <option>Size</option>
+                    <option>Type</option>
+                    <option>Public</option>
+                    <option>Commercial</option>
+                    <option>ID</option>
+                    <option>IsValid</option>
+                    <option>Visits</option>
+                    <option>rating</option>
+                </select>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="searchterm">Enter Search Term:</label>
+            <input type="text" class="form-control" id="searchtearm">
+        </div>
+        <div class="container">
+            <h2>Other Options</h2>
+            <div class="btn-group btn-group-lg">
+                <button type="button" class="btn btn-primary">Manage Property</button>
+                <button type="button" class="btn btn-primary">Add Property</button>
+                <button type="button" class="btn btn-primary">View Other Properties</button>
+                <button type="button" class="btn btn-primary">Log Out</button>
+            </div>
+        </div>
+        <style>
+            .bg-4 { 
+                padding-top: 50px;
+            background-color: #2f2f2f;
+            color: #ffffff;
+            }
+        </style>
+
+        <footer class="container-fluid bg-4 text-center">
+            <p> <a href="https://www.cc.gatech.edu">College of Computing at GA Tech</a></p> 
+        </footer>
+    </body>
+</html>

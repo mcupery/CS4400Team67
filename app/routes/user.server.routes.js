@@ -5,6 +5,8 @@ module.exports = function(app) {
 	app.route('/register').get(user.render_reg)
 						  .post(user.checkuser, user.checkProperty, 
 							user.register, user.addProperty);
-	app.route('/main').get(user.render_main);
+	app.route('/main/Owner').get(user.render_main_owner);
+	app.route('/main/Admin').get(user.render_main_admin);
+	app.route('/main/Visitor').get(user.render_main_visitor);
 	
 };

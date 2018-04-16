@@ -26,20 +26,23 @@ exports.render_reg = function(req, res, next) {
 		//show register visitor page
 		res.render('visitor_reg', {});
 	}
-	next();
 };
 
-exports.render_main = function(req, res) {
-	var user_type = req.query.user_type;
-	switch(user_type) {
-		case 'Admin':  	res.render('admin_console', {
-			title: "Admin Console",
-			username: req.session.user.username
-		});
-		break;
-			
-	}
+exports.render_main_owner = function(req, res, next) {
+	//get list of this owner's properties, joined
+	//with their ratings, and send to main owner page
 
+	
+};
+
+exports.render_main_visitor = function(req, res, next) {
+
+	
+};
+
+exports.render_main_admin = function(req, res, next) {
+
+	
 };
 
 exports.checkuser = function(req, res, next) {
@@ -154,6 +157,7 @@ exports.addProperty = function(req, res, next) {
 							console.log('Transaction Complete.');
 							connection.release();
 							//open the next page for the owner
+							//res.redirect(somewhere)
 							res.end();
 						});
 					});
@@ -162,11 +166,12 @@ exports.addProperty = function(req, res, next) {
 		});	
 	} else {
 		//open the next page for the visitor
+		//res.redirect(somewhere)
 		res.end();
 	}
 };
 
-exports.login = function(req, res) {
+exports.login = function(req, res, next) {
 	var email = req.body.email;
 	var password = req.body.password;
 	
@@ -174,9 +179,7 @@ exports.login = function(req, res) {
 	var query = "SELECT * from user WHERE email = ?";
 	runQuery(query, [email], (error, results, fields) => {
 			if (error) {
-				res.status(422)
-					.send({ errors: 'Error querying database: ' + error.message });
-				return console.error("Query error: " + error.message);
+				return next(new Error('Error querying database: ' + error.message));
 			}
 			console.log(results);
 			if (results.length === 1) {
@@ -187,25 +190,21 @@ exports.login = function(req, res) {
 					//username and password match
 					matchFound = true;
 					//create user object and attach to session
+					//user is now 'logged in'
 					req.session.user = {
 						username: results[0].username,
 						user_type: results[0].user_type
 					};
 					
-					res.redirect('main?user_type=' + results[0].user_type);
-					
+					res.redirect('main/' + results[0].user_type);
 				} else {
-					res.status(422)
-						.send({ errors: 'Invalid username/password'});
-					console.log("no match");
+					return next(new Error("Invalid username/password."));
 				}
 			} else {
-				res.status(422)
-					.send({ errors: 'Invalid username/password'});
-				console.log("user not found");
+				return next(new Error("Invalid username/password."));
 			}
-				
-		});
+	});
+	next();
 };
 
 
@@ -227,7 +226,7 @@ runQuery = function(query, params, resultHandler) {
 	console.log("params says: " + params);
 	dbpool.getConnection(function(err, connection) {
 		if (err) {
-			result = "Error connecting to MySql: " + err.message;
+			 throw (new Error("Error connecting to MySql: " + err.message));
 		} else {
 			connection.query(query, params, resultHandler);
 		}
@@ -235,8 +234,3 @@ runQuery = function(query, params, resultHandler) {
 	});
 }
 
-sendError = function(res, error, message) {
-	res.status(422)
-	.send({ errors: message + ' ' + error.message });
-	return console.error("Query error: " + error.message);
-}
