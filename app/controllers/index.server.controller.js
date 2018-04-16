@@ -4,6 +4,7 @@ exports.render = function(req, res) {
 		console.log(req.session.lastVisit);
 	}
 	req.session.lastVisit = new Date();
-	//render the index.ejs template
+	req.session.user = "";
+	//render the landing page template
 	res.render('landing', {});
 };

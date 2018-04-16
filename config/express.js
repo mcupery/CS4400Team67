@@ -35,6 +35,11 @@ module.exports = function() {
 	require('../app/routes/user.server.routes.js')(app);
 	
 	app.use('/public', express.static('public')); //serve images, etc. from this folder
-	
+	//global error handler
+	app.use(function(err, req, res, next) {
+		console.error(err);
+		res.render('errorpage', { error: err });
+	});
+
 	return app;
 };
