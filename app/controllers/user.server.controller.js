@@ -4,7 +4,7 @@ crypto.DEFAULT_ENCODING = 'base64';
 var mysql = require('./../../config/mysql');
 var property = require('./../models/property');
 
-exports.render_reg = function(req, res) {
+exports.render_reg = function(req, res, next) {
 	if (req.query.user_type === 'Owner') {
 		//show register owner page
 		//load list of property items
@@ -14,9 +14,7 @@ exports.render_reg = function(req, res) {
 		var items;
 		runQuery(query, params, (error, results, fields) => {
 			if (error) {
-				res.status(422)
-					.send({ errors: 'Error querying database: ' + error.message });
-				return console.error("Query error: " + error.message);
+				return next(error);
 			}
 			console.log(results);
 			if (results.length > 0) {
@@ -24,12 +22,11 @@ exports.render_reg = function(req, res) {
 			}
 			res.render('owner_reg', {items});
 		});
-
-		
 	} else if (req.query.user_type === 'Visitor') {
 		//show register visitor page
 		res.render('visitor_reg', {});
 	}
+	next();
 };
 
 exports.render_main = function(req, res) {

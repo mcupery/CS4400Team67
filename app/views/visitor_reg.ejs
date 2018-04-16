@@ -2,99 +2,82 @@
 <html lang="en">
 	<head>
 		<style>
- 	.bg-1 { 
-       background-color: #1abc9c;
-        color: #ffffff;
-    }
-  	</style>
+			.bg-1 { 
+			background-color: #1abc9c;
+				color: #ffffff;
+			}
+			.error {
+				color:red;
+			}
+		</style>
 		<title>Atlanta Community Gardens</title>
-  			<meta charset="utf-8">
-  			<meta name="viewport" content="width=device-width, initial-scale=1">
-  			<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
- 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	https://www.cc.gatech.edu	
-
-
-<body>
-	
-	<nav class="navbar navbar-default">
-  		<div class="container">
-    		<div class="navbar-header">
-      		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        		<span class="icon-bar"></span>
-        		<span class="icon-bar"></span>
-        		<span class="icon-bar"></span> 
-      		</button>
-      	<a class="navbar-brand" href="#"></a>
-    		</div>
-    		<div class="collapse navbar-collapse" id="myNavbar">
-      			<ul class="nav navbar-nav navbar-right">
-        			<li><a href="#">About Us</a></li>
-        			<li><a href="#">Contact</a></li>
-        			<li><a href="#">How to join</a></li>
-					<li><a href="#">Rules and Regulations</a></li>
-      			</ul>
-    		</div>
-  		</div>
-	</nav>
-	
-	<div class="container-fluid bg-1 text-center">
-		<h3>Atlanta Community Gardens</h3>	
-  		<h3></h3>
-	</div>
-	
-	<div class="container-fluid bg-1 text-center">
-		<h3>New Visitor Registration</h3>	
+  		<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+	 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
+	 	<script src="public/scripts/scriptvisreg.js"></script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span> 
+					</button>
+					<a class="navbar-brand" href="#"></a>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav navbar-right">
+					</ul>
+				</div>
+			</div>
+		</nav>
 		
-	<div class="form-group">
+		<div class="container-fluid bg-1 text-center">
+			<h3>Atlanta Community Gardens</h3>	
+			<h3></h3>
+		</div>
 		
-  		<label for="email">Email:</label>
-  		<input type="text" class="form-control" id="email">
-	</div>
-		
-	<div class="form-group">
-		
-  		<label for="usr">Username:</label>
-  		<input type="text" class="form-control" id="usr">
-	</div>
-		
-	<div class="form-group">
-  		<label for="pwd">Password:</label>
-  		<input type="password" class="form-control" id="pwd">
-	</div>
-		
-	<div class="form-group">
-		
-  		<label for="pwd2">Confirm Password:</label>
-  		<input type="text" class="form-control" id="pwd2">
-	</div>
-		
-	<div class="container-fluid bg-1 text-center">	
-	
-		<a href="#" class="btn btn-default btn-lg">Register</a>
-		<a href="#" class="btn btn-default btn-lg">Cancel</a>	
-	<div class="form-group">
-		
-		
-	
-
-		
-		
-		
-	<style>
-.bg-4 { 
-	padding-top: 50px;
-    background-color: #2f2f2f;
-    color: #ffffff;
-}
-</style>
-
-<footer class="container-fluid bg-4 text-center">
-	
-	<p> <a href="https://w.w3schools.com">College of Computing at GA Tech</a></p> 
-</footer>
-		
-</body>
+		<div class="container-fluid bg-1 text-center">
+			<h3>New Visitor Registration</h3>	
+			<form action="/register?user_type=Visitor" method="POST" id="regVisitorForm">
+				<div class="form-group">			
+					<label for="email">Email:</label>
+					<input type="email" class="form-control" id="email" name="email" required>
+				</div>
+					
+				<div class="form-group">
+					<label for="usr">Username:</label>
+					<input type="text" class="form-control" id="usr" name="username" required>
+				</div>
+					
+				<div class="form-group">
+					<label for="pwd">Password:</label>
+					<input type="password" class="form-control" id="pwd" name="password" minlength="8" required>
+				</div>
+					
+				<div class="form-group">
+					<label for="pwd2">Confirm Password:</label>
+					<input type="password" class="form-control" id="pwd2" name="pwdconfirm" equalTo="#pwd" required>
+				</div>
+					
+				<div class="container-fluid bg-1 text-center">	
+					<input type="submit" class="btn btn-default btn-lg" value="Register" >
+					<a href="/" class="btn btn-default btn-lg">Cancel</a>	
+				</div>
+			</form>
+		</div>	
+		<style>
+			.bg-4 { 
+				padding-top: 50px;
+				background-color: #2f2f2f;
+				color: #ffffff;
+			}
+		</style>
+	</body>
 </html>
