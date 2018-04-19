@@ -12,7 +12,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     </head>
 
     <body>
@@ -39,66 +40,85 @@
         <div class="container-fluid bg-1 text-center">
             <h2>Welcome <%= username %></h2>
             <p>Your Properties:</p>
-            <table class="table table-bordered">
+            <table id="properties" class="tablesorter table table-bordered">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>City</th>
-                        <th>Zip</th>
-                        <th>Size</th>
-                        <th>Type</th>
-                        <th>Public</th>
-                        <th>Commercial</th>
-                        <th>ID</th>
-                        <th>IsValid</th>
-                        <th>Visits</th>
-                        <th>Rating</th>
+                        <th id='name'>Name</th>
+                        <th id='street'>Address</th>
+                        <th id='city'>City</th>
+                        <th id='zip'>Zip</th>
+                        <th id='size'>Size</th>
+                        <th id='type'>Type</th>
+                        <th id='is_public'>Public</th>
+                        <th id='is_commercial'>Commercial</th>
+                        <th id='id'>ID</th>
+                        <th id='is_approved'>IsValid</th>
+                        <th id='visits'>Visits</th>
+                        <th id='rating'>Rating</th>
                     </tr>
                 </thead>
                 <tbody>
-                <% for (i = 0; i < properties.length; i+=1) { %>
+                <% for (i = 0; i < results.length; i+=1) { %>
                     <tr>
-                        <% prow = properties[i]; %>
+                        <% prow = results[i]; %>
                         <td><%= prow.name %></td>
                         <td><%= prow.street %></td>
                         <td><%= prow.city %></td>
                         <td><%= prow.zip %></td>
                         <td><%= prow.size %></td>
                         <td><%= prow.property_type %></td>
-                        <td><%= prow.is_public %></td>
-                        <td><%= prow.is_commercial %></td>
+                        <% if (prow.is_public === 0) { %>
+                            <td>False</td>
+                        <% } else { %>
+                            <td>True</td>
+                        <% } %>
+                        <% if (prow.is_commercial === 0) { %>
+                            <td>False</td>
+                        <% } else { %>
+                            <td>True</td>
+                        <% } %>                        
                         <td><%= prow.id %></td>
-                        <td><%= prow.is_approved %></td>
+                        <% if (prow.is_approved === null) { %>
+                            <td>False</td>
+                        <% } else { %>
+                            <td>True</td>
+                        <% } %>
                         <td><%= prow.visits %></td>
-                        <td><%= prow.rating %></td>
+                        <% if (prow.rating === null) { %>
+                            <td>N/A</td>
+                        <% } else { %>
+                            <td><%= prow.rating %></td>
+                        <% } %>
                     </tr>
                 <% } %>
                 </tbody>
             </table>
         </div>
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
-                <select class="form-control" id="sel_searchattribute" name="searchattribute">
-                    <option>Name</option>  
-                    <option>Street</option>
-                    <option>City</option>
-                    <option>Zip</option>
-                    <option>Size</option>
-                    <option>Type</option>
-                    <option>Public</option>
-                    <option>Commercial</option>
-                    <option>ID</option>
-                    <option>IsValid</option>
-                    <option>Visits</option>
-                    <option>rating</option>
-                </select>
-            </button>
-        </div>
-        <div class="form-group">
-            <label for="searchterm">Enter Search Term:</label>
-            <input type="text" class="form-control" id="searchtearm">
-        </div>
+        <form action="/main/Owner" method="POST">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
+                    <select id="sel_searchterm" class="form-control" id="sel_searchattribute" name="searchattribute">
+                        <option>Name</option>  
+                        <option>Street</option>
+                        <option>City</option>
+                        <option>Zip</option>
+                        <option>Size</option>
+                        <option>Type</option>
+                        <option>Public</option>
+                        <option>Commercial</option>
+                        <option>ID</option>
+                        <option>IsValid</option>
+                        <option>Visits</option>
+                        <option>Rating</option>
+                    </select>
+                </button>
+            </div>
+            <div class="form-group">
+                <label for="searchterm">Enter Search Term:</label>
+                <input type="text" class="form-control" id="searchterm" name="searchterm">
+                <button type="submit" class="btn btn-primary">Search Properties</button>
+            </div>
+        </form>
         <div class="container">
             <h2>Other Options</h2>
             <div class="btn-group btn-group-lg">
@@ -119,5 +139,7 @@
         <footer class="container-fluid bg-4 text-center">
             <p> <a href="https://www.cc.gatech.edu">College of Computing at GA Tech</a></p> 
         </footer>
+        <script src="/public/scripts/jquery.tablesorter.js"></script>
+        <script src="/public/scripts/scriptownermain.js"></script>
     </body>
 </html>

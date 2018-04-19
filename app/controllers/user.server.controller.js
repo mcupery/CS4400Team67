@@ -31,7 +31,39 @@ exports.render_reg = function(req, res, next) {
 exports.render_main_owner = function(req, res, next) {
 	//get list of this owner's properties, joined
 	//with their ratings, and send to main owner page
+	var search = '';
+	var searchterm = '';
+	if (req.body.searchattribute != undefined && req.body.searchattribute != '') {
+		search = "AND " + req.body.searchattribute + " LIKE ? ";
+		if (req.body.searchterm != undefined && req.body.searchterm != '') {
+			searchterm = "%" + req.body.searchterm + "%";
+		}
+	}
+	var query = "SELECT id, name, property_type, " +
+	"size, is_commercial, is_public, " +
+	"street, city, zip, AVG(visit.rating) as rating, COUNT(visit.rating) as visits " +
+	"FROM property LEFT OUTER JOIN visit ON property.id=visit.property_id " +
+	"WHERE owner = ? ";
+	if (req.body.searchterm != '') {
+		query = query + search;
+	}
+	query = query + "GROUP BY id";
 
+	var params;
+
+	if (req.body.searchterm != '') {
+		params = [req.session.user.username, searchterm];
+	} else {
+		params = [req.session.user.username];
+	}
+
+	runQuery(query, params, (error, results, fields) => {
+		if (error) {
+			return next(error);
+		}
+		res.render('owner_main', { username: req.session.user.username,
+			results: results });
+	});
 	
 };
 
@@ -204,7 +236,7 @@ exports.login = function(req, res, next) {
 				return next(new Error("Invalid username/password."));
 			}
 	});
-	next();
+	//next();
 };
 
 
