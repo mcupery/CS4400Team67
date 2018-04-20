@@ -43,6 +43,7 @@
             <table id="properties" class="tablesorter table table-bordered">
                 <thead>
                     <tr>
+                        <th></th>
                         <th id='name'>Name</th>
                         <th id='street'>Address</th>
                         <th id='city'>City</th>
@@ -61,6 +62,7 @@
                 <% for (i = 0; i < results.length; i+=1) { %>
                     <tr>
                         <% prow = results[i]; %>
+                        <td><a href='/manageProperty?id=<%= prow.id %>'>Manage</a></td>
                         <td><%= prow.name %></td>
                         <td><%= prow.street %></td>
                         <td><%= prow.city %></td>
@@ -123,7 +125,7 @@
             <h2>Other Options</h2>
             <div class="btn-group btn-group-lg">
                 <button type="button" class="btn btn-primary">Manage Property</button>
-                <button type="button" class="btn btn-primary">Add Property</button>
+                <a href="/addProperty" type="button" class="btn btn-primary">Add Property</a>
                 <button type="button" class="btn btn-primary">View Other Properties</button>
                 <button type="button" class="btn btn-primary">Log Out</button>
             </div>

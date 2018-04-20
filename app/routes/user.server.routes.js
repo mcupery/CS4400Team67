@@ -9,5 +9,8 @@ module.exports = function(app) {
 							.post(user.render_main_owner);
 	app.route('/main/Admin').get(user.render_main_admin);
 	app.route('/main/Visitor').get(user.render_main_visitor);
+	app.route('/addProperty').get(user.render_add_property)
+							.post(user.checkProperty, user.addProperty);
+	app.route('/manageProperty').get(user.manage_property);
 	
 };

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<style>
+         	.bg-1 { 
+                background-color: #1abc9c;
+                color: #ffffff;
+            }
+  	    </style>
+		<title>Atlanta Community Gardens</title>
+  		<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+	<nav class="navbar navbar-default">
+  		<div class="container">
+    		<div class="navbar-header">
+      		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        		<span class="icon-bar"></span>
+        		<span class="icon-bar"></span>
+        		<span class="icon-bar"></span> 
+      		</button>
+      	<a class="navbar-brand" href="#"></a>
+    		</div>
+    		<div class="collapse navbar-collapse" id="myNavbar">
+      			<ul class="nav navbar-nav navbar-right">
+      			</ul>
+    		</div>
+  		</div>
+	</nav>
+	
+	<div class="container-fluid bg-1 text-center">
+		<h3>Atlanta Community Gardens</h3>	
+  		<h3></h3>
+	</div>
+	
+	<div class="container-fluid bg-1 text-center">
+        <h3>Manage Property</h3>
+        <% var prop = info[0]; %>
+        <p>Property ID: <%= prop.id %></p>
+        <p>Property Type: <%= prop.property_type %></p>
+	<form action='/manageProperty' method="POST" id='ownerForm'>	
+        <div class="form-group">
+            <label for="propertyname">Property Name:</label>
+            <input type="text" class="form-control" id="propertyname" name="propname" minlength="5" required><%= prop.name %></input>
+        </div>	
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" class="form-control" id="address" name="propaddress" required>
+        </div>	
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" class="form-control" id="city" name="propcity" required>
+        </div>	
+        <div class="form-group">
+            <label for="zip">Zip:</label>
+            <input type="number" class="form-control" id="zip" name="propzip" minlength="5" maxlength="5" required>
+        </div>	
+        <div class="form-group">
+            <label for="acres">Acres:</label>
+            <input type="number" class="form-control" id="acres" name="propacres" required>
+        </div>	
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Public?
+            <select class="form-control" name="is_public" id="sel_public">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+            </button>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Commercial?
+            <select class="form-control" name="is_commercial" id="sel_commercial">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+            </button>
+        </div>
+        <table id="property_items" name="property_items">
+            <thead>
+                <th>Property Items</th>
+            </thead>
+            <tbody>
+                <% for (i = 0; i < prop_items.length; i+=1) { %>
+                    <tr name="<%= prop_items[0].item_name %>"><%= prop_items[0].item_name %> </tr>
+                <% } %>
+            </tbody>
+        </table>
+        </form>
+        <form action='/addItemToProperty' method="POST">
+        <p>Add New (approved) Animals or Crops to Property:</p>
+        <div class="dropdown" id="dd_animal">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Animal
+            <select class="form-control" name="animal" id="sel_animal">
+            <% for (i = 0; i < items.length; i+=1) { 
+                if (items[i].item_type === 'Animal') { %>
+                <option><%= items[i].item_name %></option>
+                <% } %>
+            <% } %>
+            </select>
+            </button>
+        </div>	
+        <div class="dropdown" id="dd_farmcrop">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Crop
+            <select class="form-control" name="farmcrop" id="sel_farmcrop">
+                <% for (i = 0; i < items.length; i+=1) { 
+                    if (items[i].item_type != 'Animal') { %>
+                <option><%= items[i].item_name %></option>
+                <% } %>
+                <% } %>
+            </select>
+            </button>
+        </div>
+        <div class="dropdown" id="dd_gardencrop">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Crop
+            <select class="form-control" name="gardencrop" id="sel_gardencrop">
+                <% for (i = 0; i < items.length; i+=1) { 
+                    if (items[i].item_type === 'Flower' || items[i].item_type === 'Vegetable') { %>
+                    <option><%= items[i].item_name %></option>
+                    <% } %>
+                <% } %>
+            </select>
+            </button>
+        </div>	
+        <div class="dropdown" id="dd_orchardcrop">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Crop
+            <select class="form-control" name="orchardcrop" id="sel_orchardcrop">
+                <% for (i = 0; i < items.length; i+=1) { 
+                    if (items[i].item_type === 'Fruit' || items[i].item_type === 'Nut') { %>
+                    <option><%= items[i].item_name %></option>
+                    <% } %>
+                <% } %>
+            </select>
+            </button>
+        </div>		
+        <div class="container-fluid bg-1 text-center">	
+            <input type="submit" class="btn btn-default btn-lg" value="Add" >
+        </div>
+    </form>		
+	
+	<div class="form-group">
+		
+	<div>
+		Request Approval of New Crop or Animal
+		<div class="form-group">
+			<label>Please enter requested Crop or Animal here:</label>
+			<div class="dropdown">
+          		<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Type
+  		        <select class="form-control" name="croptype" id="sel_croptype">
+                    <option>Animal</option>
+                    <option>Vegetable</option>
+                    <option>Fruit</option>
+                    <option>Nut</option>
+                </select>
+                </button>
+            </div>
+        </div>
+	</div>
+	<div class="container-fluid bg-1 text-center">	
+		<a href="#" class="btn btn-default btn-lg">Request</a>
+		<a href="#" class="btn btn-default btn-lg">Cancel</a>	
+	</div>
+			
+	<div class="container-fluid bg-1 text-center">	
+		<a href="#" class="btn btn-default btn-lg">Save</a>
+		<a href="#" class="btn btn-default btn-lg">Delete Property</a>	
+	<div class="form-group">
+		
+	<style>
+        .bg-4 { 
+            padding-top: 50px;
+            background-color: #2f2f2f;
+            color: #ffffff;
+        }
+    </style>
+
+    <footer class="container-fluid bg-4 text-center">
+        
+        <p> <a href="http://cc.gatech.edu">College of Computing at GA Tech</a></p> 
+    </footer>
+		
+    </body>
+</html>
+

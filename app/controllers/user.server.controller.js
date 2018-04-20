@@ -77,6 +77,58 @@ exports.render_main_admin = function(req, res, next) {
 	
 };
 
+exports.render_add_property = function(req, res, next) {
+			//load list of property items
+	var query = "SELECT * FROM property_item WHERE is_approved = ? " +
+		"ORDER BY item_type, item_name";
+	var params = true;
+	var items;
+	runQuery(query, params, (error, results, fields) => {
+		if (error) {
+			return next(error);
+		}
+		if (results.length > 0) {
+			items = results;
+		}
+		res.render('add_property', { username: req.session.user.username,
+			items});
+	});
+};
+
+exports.manage_property = function(req, res, next) {
+	var id = req.query.id;
+	if (id != '') {
+		//load manage_property page with this property's info
+		var info; //property information
+		var prop_items; //property_has items
+		var items; //all approved property items
+		var query = "SELECT * from property WHERE id = ?"
+		runQuery(query, [id], (error, results, fields) => {
+			if (error) { return next(error); }
+			if (results) {
+				info = results;
+				var nextQuery = "SELECT item_name from property_has WHERE property_id = ?";
+				runQuery(nextQuery, [id], (err, records, f) => {
+					if (err) { return next(err); }
+					if (records) {
+						prop_items = records;
+					}
+				
+					var lastQuery = "SELECT * FROM property_item WHERE is_approved = ?";
+					runQuery(lastQuery, [true], (e, r, f) => {
+						if (e) { return next(e); }
+						if (r) {
+							items = r;
+						}
+						res.render('manage_property', { info, prop_items, items });						
+					});
+				});
+			}
+
+		});
+	}
+};
+
 exports.checkuser = function(req, res, next) {
 	//register new owner or visitor
 	console.log(req.body);
@@ -144,21 +196,25 @@ exports.addProperty = function(req, res, next) {
 				var is_public = (req.body.is_public === 'Yes') ? true : false;
 				var insertPropParams = [[req.body.propname, req.body.propacres, 
 				is_commercial, is_public, req.body.propaddress, req.body.propcity,
-				req.body.propzip, req.body.proptype, req.body.username]];				
+				req.body.propzip, req.body.proptype, req.session.user.username]];		
+				
 				connection.query(insertProp, [insertPropParams], function(err, results, fields) {
 					if (err) { 
 						connection.rollback(function() {
 							return next(err);
 						});
 					}
-					if (results === undefined) {
+					//results should contain the new property id.
+					var propId;
+					try {
+						propId = results.insertId;
+					} catch (e) {
 						connection.rollback(function() {
-							return next(new Error("Insert property failed."));
+							return next(new Error("Insert property failed. Query: " + insertProp +
+							" Params: " + [insertPropParams]));
 						});
 					}
-					console.log(results);
-					//results should contain the new property id.
-					var propId = results.insertId;
+					
 					var insertPropHas = "INSERT INTO property_has(property_id, item_name) " +
 						"values ?";
 					var propItems = [];
@@ -188,20 +244,15 @@ exports.addProperty = function(req, res, next) {
 							}
 							console.log('Transaction Complete.');
 							connection.release();
-							//open the next page for the owner
-							//res.redirect(somewhere)
-							res.end();
 						});
 					});
 				});
 			 });
 		});	
-	} else {
-		//open the next page for the visitor
-		//res.redirect(somewhere)
-		res.end();
 	}
+	res.redirect('/main/' + req.session.user.user_type);
 };
+
 
 exports.login = function(req, res, next) {
 	var email = req.body.email;

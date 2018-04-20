@@ -27,7 +27,7 @@ $(document).ready(function() {
 
     showListDefaults();
 
-    $('#regOwnerForm').validate( {
+    $('#ownerForm').validate( {
         highlight: function(element, errorClass, validClass) {
             $(element).addClass(errorClass).removeClass(validClass);
             
