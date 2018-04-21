@@ -12,5 +12,10 @@ module.exports = function(app) {
 	app.route('/addProperty').get(user.render_add_property)
 							.post(user.checkProperty, user.addProperty);
 	app.route('/manageProperty').get(user.manage_property);
+	//app.route('/viewProperties').get(user.render_view_properties);
+	app.route('/requestItem').post(user.request_item);
+	app.route('/addItemToProperty').post(user.add_property_item);
+	app.route('/deletePropertyItem').get(user.delete_property_item);
+	app.route('/logout').get(user.logout);
 	
 };

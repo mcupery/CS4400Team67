@@ -120,7 +120,11 @@ exports.manage_property = function(req, res, next) {
 						if (r) {
 							items = r;
 						}
-						res.render('manage_property', { info, prop_items, items });						
+						var request_response = '';
+						if (req.request_response) {
+							request_response = req.request_response;
+						}
+						res.render('manage_property', { request_response: request_response, info, prop_items, items });						
 					});
 				});
 			}
@@ -290,9 +294,72 @@ exports.login = function(req, res, next) {
 	//next();
 };
 
+exports.request_item = function(req, res, next) {
+	var propId = req.query.id;
+	var property_type = req.query.type;
+	var item_type = '';
+	switch (property_type) {
+		case 'Farm':
+			item_type = req.body.farm_item_type;
+			break;
+		case 'Garden':
+			item_type = req.body.garden_item_type;
+			break;
+		case 'Orchard':
+			item_type = req.body.orchard_item_type;
+			break;
+		default:
+			break;
+	}
+	var query = "INSERT INTO property_item (item_name, item_type, is_approved) " +
+		"values (?,?,?)";
+	runQuery(query, [req.body.item_name, item_type, false], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.redirect("/manageProperty?id=" + propId);
+	})
+}
+
+exports.add_property_item = function(req, res, next) {
+	var query = "INSERT INTO property_has values ?";
+	var propId = req.query.id;
+	var propItems = [];
+	switch (req.query.type) {
+		case 'Farm':
+			if (req.body.animal != 'None') { propItems.push([propId, req.body.animal]); }
+			if (req.body.farmcrop != 'None') { propItems.push([propId, req.body.farmcrop]); }
+			break;
+		case 'Garden':
+			if (req.body.gardencrop != 'None') { propItems.push([propId, req.body.gardencrop]); }
+			break;
+		case 'Orchard':
+			if (req.body.orchardcrop != 'None') { propItems.push([propId, req.body.orchardcrop]); }
+			break;
+		default:
+			break;
+	}
+	if (propItems.length > 0) {
+		runQuery(query, [propItems], (error, results, fields) => {
+			if (error) { return next(error); }
+			res.redirect("/manageProperty?id=" + propId);
+		});
+
+	}
+};
+
+exports.delete_property_item = function (req, res, next) {
+	var propId = req.query.id;
+	var item_name = req.query.item_name;
+	var query = "DELETE FROM property_has WHERE property_id = ?" +
+		" AND item_name = ?";
+	runQuery(query, [propId, item_name], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.redirect("/manageProperty?id=" + propId);
+	})
+}
 
 exports.logout = function(req, res) {
 	req.session.user = null;
+	res.redirect("/");
 	
 };
 
