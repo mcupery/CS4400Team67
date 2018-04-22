@@ -89,28 +89,27 @@
                 </select>
                 </button>
             </div>
-        </form>            
-            
-            <table id="property_items" name="property_items" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Property Items</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (i = 0; i < prop_items.length; i+=1) { %>
-                        <tr name="<%= prop_items[i].item_name %>">
-                            <td><a href="/deletePropertyItem?id=<%=prop.id%>&amp;item_name=<%=prop_items[i].item_name%>">Delete</a></td>
-                            <td name="prop_item_name"><%= prop_items[i].item_name %></td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
             <div class="container-fluid bg-1 text-center">	
-                    <button type="submit" class="btn btn-default btn-lg">Save</button>
-                    <a href="/deleteProperty?id=<%=prop.id%>" class="btn btn-default btn-lg">Delete Property</a>
+                <button type="submit" class="btn btn-default btn-lg">Save</button>
+                <a href="/deleteProperty?id=<%=prop.id%>" class="btn btn-default btn-lg">Delete Property</a>
             </div>	
+        </form>            
+        <table id="property_items" name="property_items" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Property Items</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (i = 0; i < prop_items.length; i+=1) { %>
+                    <tr name="<%= prop_items[i].item_name %>">
+                        <td><a href="/deletePropertyItem?id=<%=prop.id%>&amp;item_name=<%=prop_items[i].item_name%>">Delete</a></td>
+                        <td name="prop_item_name"><%= prop_items[i].item_name %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
         <form action='/addItemToProperty?id=<%=prop.id%>&amp;type=<%=prop.property_type%>' method="POST">
             <h3>Add New (approved) Animals or Crops to Property:</h3>
             <div class="dropdown" id="dd_animal">

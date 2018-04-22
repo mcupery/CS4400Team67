@@ -73,12 +73,12 @@ exports.render_main_visitor = function(req, res, next) {
 };
 
 exports.render_main_admin = function(req, res, next) {
-
+	res.render('admin_main', { username: req.session.user.username });
 	
 };
 
 exports.render_add_property = function(req, res, next) {
-			//load list of property items
+	//load list of property items
 	var query = "SELECT * FROM property_item WHERE is_approved = ? " +
 		"ORDER BY item_type, item_name";
 	var params = true;
@@ -94,6 +94,35 @@ exports.render_add_property = function(req, res, next) {
 			items});
 	});
 };
+
+exports.render_view_other_properties = function(req, res, next) {
+	var query = "SELECT * FROM property WHERE owner <> ? AND approved_by IS NOT NULL";
+	runQuery(query, [req.session.user.username], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.render("owner_view_other_properties", { username: req.session.user.username,
+			results: results });
+	})
+};
+
+exports.search_other_properties = function(req, res, next) {
+	var query = build_search_query(req, false);
+	var params;
+
+	if (req.body.searchterm != '') {
+		params = [req.session.user.username, searchterm];
+	} else {
+		params = [req.session.user.username];
+	}
+
+	runQuery(query, params, (error, results, fields) => {
+		if (error) {
+			return next(error);
+		}
+		res.render('owner_view_other_properties', { username: req.session.user.username,
+			results: results });
+	});
+
+}
 
 exports.manage_property = function(req, res, next) {
 	var id = req.query.id;
@@ -131,6 +160,21 @@ exports.manage_property = function(req, res, next) {
 
 		});
 	}
+};
+
+exports.save_property_changes = function(req, res, next) {
+	var query = "UPDATE property SET name = ?, size = ?, is_commercial = ?, " +
+		"is_public = ?, street = ?, city = ?, zip = ? " +
+		"WHERE id=?";
+	runQuery(query, [req.body.propname, req.body.propacres, 
+		convert_to_boolean(req.body.is_commercial),
+		convert_to_boolean(req.body.is_public), 
+		req.body.propaddress, req.body.propcity, req.body.propzip,
+		req.query.id],
+		(error, results, fields) => {
+			if (error) { return next(error); }
+			res.redirect("/main/" + req.session.user.user_type);
+		});
 };
 
 exports.checkuser = function(req, res, next) {
@@ -254,7 +298,7 @@ exports.addProperty = function(req, res, next) {
 			 });
 		});	
 	}
-	res.redirect('/main/' + req.session.user.user_type);
+	res.redirect('main/' + req.session.user.user_type);
 };
 
 
@@ -355,7 +399,116 @@ exports.delete_property_item = function (req, res, next) {
 		if (error) { return next(error); }
 		res.redirect("/manageProperty?id=" + propId);
 	})
+};
+
+exports.render_property_details = function(req, res, next) {
+	var query1 = "SELECT property.id, property.name, property.size, property.is_commercial," +
+	" property.is_public, property.street, property.city, property.zip," +
+	" property.property_type, property.owner, user.email, " +
+	" AVG(visit.rating) as rating, COUNT(visit.rating) as visits " +
+	" from property, user, visit where user.username = property.owner " +
+	" and visit.property_id = property.id and property.id = ?";
+	var query2 = "SELECT item_name, item_type from property_has natural join" +
+	" property_item where property_id = ? group by item_type";
+	runQuery(query1, [req.query.id], (error, results, fields) => {
+		if (error) { return next(error); }
+		runQuery(query2, [req.query.id], (e, items, fields) => {
+			if (e) { return next(e); }
+			res.render("property_details", {results: results, items: items});
+		});
+	});
+};
+
+exports.view_visitors = function(req, res, next) {
+	var query = "Select user.username, user.email, count(visit.username) as num_visits " +
+	"from user left join visit on visit.username = user.username " +
+	"where user.user_type = 'Visitor' " +
+	"group by user.username";
+	runQuery(query, [], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.render('view_visitors', {results: results} );
+	});
+
+};
+
+exports.view_owners = function(req, res, next) {
+	var query = "Select user.username, user.email, count(property.owner) as num_props " +
+	"from user left join property on property.owner = user.username " +
+	"where user.user_type = 'Owner' " +
+	"group by user.username";
+	runQuery(query, [], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.render('view_owners', {results: results} );
+	});	
 }
+
+exports.delete_visitor = function(req, res, next) {
+	var query = "DELETE FROM user WHERE username = ?";
+	runQuery(query, [req.query.username], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.redirect('/viewVisitors');
+	});
+};
+
+exports.delete_owner = function(req, res, next) {
+	var query = "DELETE FROM user WHERE username = ?";
+	runQuery(query, [req.query.username], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.redirect('/viewOwners');
+	});
+};
+
+exports.delete_visits = function(req, res, next) {
+	var query = "DELETE FROM visit WHERE username = ?";
+	runQuery(query, [req.query.username], (error, results, fields) => {
+		if (error) { return next(error); }
+		res.redirect('/viewVisitors');
+	});	
+};
+
+exports.search_visitors = function(req, res, next) {
+	
+	var	query = "Select user.username, user.email, count(visit.username) as num_visits " +
+		"from user left join visit on visit.username = user.username " +
+		"where user.user_type = 'Visitor' and ";
+	switch (req.body.searchattribute) {
+		case 'Username' :
+			query += "user.username";
+			break;
+		case 'Email':
+			query += "user.email";
+			break;
+		default:
+			break;
+	}
+	query += " LIKE ? group by user.username";
+	var searchterm = "%" + req.body.searchterm + "%";
+	runQuery(query, [searchterm], (error, results, fields) => {
+		res.render('view_visitors', {results: results} );
+	});
+};
+
+exports.search_owners = function(req, res, next) {
+	
+	var	query = "Select user.username, user.email, count(property.owner) as num_props " +
+		"from user left join property on property.owner = user.username " +
+		"where user.user_type = 'Owner' and ";
+	switch (req.body.searchattribute) {
+		case 'Username' :
+			query += "user.username";
+			break;
+		case 'Email':
+			query += "user.email";
+			break;
+		default:
+			break;
+	}
+	query += " LIKE ? group by user.username";
+	var searchterm = "%" + req.body.searchterm + "%";
+	runQuery(query, [searchterm], (error, results, fields) => {
+		res.render('view_owners', {results: results} );
+	});
+};
 
 exports.logout = function(req, res) {
 	req.session.user = null;
@@ -382,5 +535,37 @@ runQuery = function(query, params, resultHandler) {
 		}
 		connection.release();
 	});
-}
+};
 
+convert_to_boolean = function(value) {
+	return (value == 'Yes' ? true : false);
+};
+
+build_search_query = function(req, is_owner) {
+	var search = '';
+	var searchterm = '';
+	var approved = '';
+	var op = "=";
+	if (req.body.searchattribute != undefined && req.body.searchattribute != '') {
+		search = "AND " + req.body.searchattribute + " LIKE ? ";
+		if (req.body.searchterm != undefined && req.body.searchterm != '') {
+			searchterm = "%" + req.body.searchterm + "%";
+		}
+	}
+	var query = "SELECT id, name, property_type, " +
+	"size, is_commercial, is_public, " +
+	"street, city, zip, AVG(visit.rating) as rating, COUNT(visit.rating) as visits " +
+	"FROM property LEFT OUTER JOIN visit ON property.id=visit.property_id " +
+	"WHERE owner ";
+	if (!is_owner) {
+		op = "<>";
+		approved = "AND approved_by IS NOT NULL";
+	}
+	query += op + " ?" + approved;
+
+	if (req.body.searchterm != '') {
+		query = query + search;
+	}
+	query = query + ", GROUP BY id";
+	return query;
+};

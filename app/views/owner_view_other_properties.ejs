@@ -39,7 +39,7 @@
         </div>
         <div class="container-fluid bg-1 text-center">
             <h2>Welcome <%= username %></h2>
-            <p>Your Properties:</p>
+            <p>Other Owners' Properties:</p>
             <table id="properties" class="tablesorter table table-bordered">
                 <thead>
                     <tr>
@@ -53,7 +53,6 @@
                         <th id='is_public'>Public</th>
                         <th id='is_commercial'>Commercial</th>
                         <th id='id'>ID</th>
-                        <th id='is_approved'>IsValid</th>
                         <th id='visits'>Visits</th>
                         <th id='rating'>Rating</th>
                     </tr>
@@ -62,7 +61,7 @@
                 <% for (i = 0; i < results.length; i+=1) { %>
                     <tr>
                         <% prow = results[i]; %>
-                        <td><a href='/manageProperty?id=<%= prow.id %>'>Manage</a></td>
+                        <td><a href='/viewProperty?id=<%= prow.id %>'>View Details</a></td>
                         <td><%= prow.name %></td>
                         <td><%= prow.street %></td>
                         <td><%= prow.city %></td>
@@ -80,11 +79,6 @@
                             <td>True</td>
                         <% } %>                        
                         <td><%= prow.id %></td>
-                        <% if (prow.is_approved === null) { %>
-                            <td>False</td>
-                        <% } else { %>
-                            <td>True</td>
-                        <% } %>
                         <td><%= prow.visits %></td>
                         <% if (prow.rating === null) { %>
                             <td>N/A</td>
@@ -96,7 +90,7 @@
                 </tbody>
             </table>
         </div>
-        <form action="/main/Owner" method="POST">
+        <form action="/viewOtherProperties" method="POST">
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
                     <select id="sel_searchterm" class="form-control" id="sel_searchattribute" name="searchattribute">
@@ -109,7 +103,6 @@
                         <option>Public</option>
                         <option>Commercial</option>
                         <option>ID</option>
-                        <option>IsValid</option>
                         <option>Visits</option>
                         <option>Rating</option>
                     </select>
@@ -124,9 +117,7 @@
         <div class="container">
             <h2>Other Options</h2>
             <div class="btn-group btn-group-lg">
-                <a href="/addProperty" type="button" class="btn btn-primary">Add Property</a>
-                <a href="/viewOtherProperties" type="button" class="btn btn-primary">View Other Properties</a>
-                <a href="/logout" type="button" class="btn btn-primary">Log Out</a>
+                <a href="/main/Owner" type="button" class="btn btn-primary">Back</a>
             </div>
         </div>
         <style>
