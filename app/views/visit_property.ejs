@@ -6,6 +6,9 @@
         background-color: #1abc9c;
         color: #ffffff;
         }
+            .error {
+                color:red;
+            }
 	    </style>
 		<title>Atlanta Community Gardens</title>
 		<meta charset="utf-8">
@@ -13,7 +16,9 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
+        <script src="public/scripts/scriptvisreg.js"></script>
     </head>
 
     <body>
@@ -64,9 +69,7 @@
                  <p id="animals"><% for (i = 0; i < items.length; i+=1) { %>
                    <% if (items[i].item_type == 'Animal') { %>
                         <%= items[i].item_name %>
-                            <% if (i < items.length - 1) { %>
-                        ,
-                        <% } %> 
+                        &nbsp;
                     <% } %> 
                 <% } %>
             <% } %></p>
@@ -74,15 +77,20 @@
             <p id="crops"><% for (i = 0; i < items.length; i+=1) { %>
               <% if (items[i].item_type != 'Animal') { %>
                    <%= items[i].item_name %>
-                       <% if (i < items.length - 1) { %>
-                   ,
-                   <% } %> 
+                    &nbsp;
                <% } %> 
            <% } %>    
 
         </div>
+        <div class="form-group">
+            <form action="/viewVisitProperty?id=<%= prop.id %>" method="POST" id="regVisitorForm">
+                <label for="rating">Rate Your Visit from 1 to 5 (5 is best!):</label>
+                <input type=number id="rating" name="rating" range="[1,5]" required>
+                <button type="submit" class="btn btn-primary">Log Visit</button>
+            </form>
+        </div>
         <div class="btn-group btn-group-lg">
-                <a href="/viewOtherProperties" type="button" class="btn btn-primary">Back</a>
+            <a href="/main/Visitor" type="button" class="btn btn-primary">Back</a>
 
         </div>
 

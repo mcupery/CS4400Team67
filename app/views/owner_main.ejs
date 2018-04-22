@@ -10,7 +10,8 @@
 		<title>Atlanta Community Gardens</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/public/scripts/themes/blue/style.css">
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -39,7 +40,7 @@
         </div>
         <div class="container-fluid bg-1 text-center">
             <h2>Welcome <%= username %></h2>
-            <p>Your Properties:</p>
+            <h3>Your Properties:</h3>
             <table id="properties" class="tablesorter table table-bordered">
                 <thead>
                     <tr>
@@ -85,11 +86,11 @@
                         <% } else { %>
                             <td>True</td>
                         <% } %>
-                        <td><%= prow.visits %></td>
-                        <% if (prow.rating === null) { %>
+                        <td><%= prow.num_visits %></td>
+                        <% if (prow.avg_rating === null) { %>
                             <td>N/A</td>
                         <% } else { %>
-                            <td><%= prow.rating %></td>
+                            <td><%= prow.avg_rating %></td>
                         <% } %>
                     </tr>
                 <% } %>
@@ -111,7 +112,7 @@
                         <option>ID</option>
                         <option>IsValid</option>
                         <option>Visits</option>
-                        <option>Rating</option>
+                        <option>Avg Rating</option>
                     </select>
                 </button>
             </div>

@@ -39,9 +39,8 @@
             <h3></h3>
         </div>
         <div class="container-fluid bg-1 text-center">
-            <h2>Welcome <%= username %></h2>
-            <h3>Other Owners' Properties:</h3>
-            <table id="properties" class="tablesorter table table-bordered">
+            <h2>Confirmed Properties</h2>
+            <table id="approved_properties" class="tablesorter table table-bordered">
                 <thead>
                     <tr>
                         <th></th>
@@ -54,15 +53,15 @@
                         <th id='is_public'>Public</th>
                         <th id='is_commercial'>Commercial</th>
                         <th id='id'>ID</th>
-                        <th id='visits'>Visits</th>
-                        <th id='rating'>Avg Rating</th>
+                        <th id='approved_by'>Verified By</th>
+                        <th id='rating'>Avg. Rating</th>
                     </tr>
                 </thead>
                 <tbody>
                 <% for (i = 0; i < results.length; i+=1) { %>
                     <tr>
                         <% prow = results[i]; %>
-                        <td><a href='/viewProperty?id=<%= prow.id %>'>View Details</a></td>
+                        <td><a href='/manageProperty?id=<%= prow.id %>'>Manage</a></td>
                         <td><%= prow.name %></td>
                         <td><%= prow.street %></td>
                         <td><%= prow.city %></td>
@@ -80,7 +79,7 @@
                             <td>True</td>
                         <% } %>                        
                         <td><%= prow.id %></td>
-                        <td><%= prow.num_visits %></td>
+                        <td><%= prow.approved_by %></td>
                         <% if (prow.avg_rating === null) { %>
                             <td>N/A</td>
                         <% } else { %>
@@ -91,7 +90,7 @@
                 </tbody>
             </table>
         </div>
-        <form action="/viewOtherProperties" method="POST">
+        <form action="/viewApprovedProperties" method="POST">
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
                     <select id="sel_searchterm" class="form-control" id="sel_searchattribute" name="searchattribute">
@@ -104,7 +103,7 @@
                         <option>Public</option>
                         <option>Commercial</option>
                         <option>ID</option>
-                        <option>Visits</option>
+                        <option>Verified By</option>
                         <option>Avg Rating</option>
                     </select>
                 </button>
@@ -116,9 +115,8 @@
             </div>
         </form>
         <div class="container">
-            <h2>Other Options</h2>
             <div class="btn-group btn-group-lg">
-                <a href="/main/Owner" type="button" class="btn btn-primary">Back</a>
+                <a href="/main/Admin" type="button" class="btn btn-primary">Back</a>
             </div>
         </div>
         <style>
@@ -133,6 +131,6 @@
             <p> <a href="https://www.cc.gatech.edu">College of Computing at GA Tech</a></p> 
         </footer>
         <script src="/public/scripts/jquery.tablesorter.js"></script>
-        <script src="/public/scripts/scriptownermain.js"></script>
+        <script>$('#approved_properties').tablesorter();</script>
     </body>
 </html>

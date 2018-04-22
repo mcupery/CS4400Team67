@@ -41,50 +41,64 @@
 	</div>
 	
 	<div class="container-fluid bg-1 text-center">
-		<h2>All Visitors</h2>
+		<h2>Approved Animals/Crops</h2>
 		<p></p>                        
-  <table class="tablesorter table table-bordered" id="visitors">
+  <table class="tablesorter table table-bordered" id="approved_items">
     <thead>
       <tr>
         <th></th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Logged Visits</th>
-        <th></th>
+        <th>Name</th>
+        <th>Type</th>
       </tr>
     </thead>
     <tbody>
     <% if (results) { %>
     <% for (i = 0; i < results.length; i+=1) { %>
         <tr>
-            <td><a href="deleteVisitor?username=<%=results[i].username%>">Delete Account</a></td>
-            <td><%= results[i].username %></td>
-            <td><%= results[i].email %></td>
-            <td><%= results[i].num_visits %></td>
-            <td><a href="deleteVisitHistory?username=<%=results[i].username%>">Delete Log History</a></td>
+            <td><a href="deleteApprovedItem?item_name=<%=results[i].item_name%>">Delete</a></td>
+            <td><%= results[i].item_name %></td>
+            <td><%= results[i].item_type %></td>
         </tr>
     <% } } %>
     </tbody>
   </table>
 </div>
 		
-<form action="/searchVisitors" method="POST">
+<form action="/searchApprovedItems" method="POST">
     <div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
             <select id="sel_searchterm" class="form-control" id="sel_searchattribute" name="searchattribute">
-                <option>Username</option>  
-                <option>Email</option>
+                <option>Name</option>  
+                <option>Type</option>
             </select>
         </button>
     </div>
     <div class="form-group">
         <label for="searchterm">Enter Search Term:</label>
         <input type="text" class="form-control" id="searchterm" name="searchterm">
-        <button type="submit" class="btn btn-primary">Search Visitors</button>
+        <button type="submit" class="btn btn-primary">Search Approved Items</button>
     </div>
 </form>
 	
-	
+<form action="/addApprovedItem" method="POST">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Item Type to Add
+            <select id="sel_typeterm" class="form-control" id="sel_typeattribute" name="typeattribute">
+                <option>None</option>
+                <option>Animal</option>  
+                <option>Vegetable</option>
+                <option>Flower</option>
+                <option>Fruit</option>
+                <option>Nut</option>
+            </select>
+        </button>
+    </div>
+    <div class="form-group">
+        <label for="additem">Enter Item to Add:</label>
+        <input type="text" class="form-control" id="additem" name="item_to_add">
+        <button type="submit" class="btn btn-primary">Add Item</button>
+    </div>
+</form>	
 	
 	
 	
@@ -105,7 +119,7 @@
 	<p> <a href="https://www.cc.gatech.edu">College of Computing at GA Tech</a></p> 
 </footer>
 <script src="/public/scripts/jquery.tablesorter.js"></script>
-<script>$('#visitors').tablesorter();</script>
+<script>$('#approved_items').tablesorter();</script>
 </body>
 </html>
 

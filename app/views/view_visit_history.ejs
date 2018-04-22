@@ -7,12 +7,11 @@
         color: #ffffff;
     }
   	</style>
-		<title>Atlanta Community Gardens</title>
-  			<meta charset="utf-8">
-  			<meta name="viewport" content="width=device-width, initial-scale=1">
-  			<link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/public/scripts/themes/blue/style.css">
+	<title>Atlanta Community Gardens</title>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/public/scripts/themes/blue/style.css">
  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -41,53 +40,33 @@
 	</div>
 	
 	<div class="container-fluid bg-1 text-center">
-		<h2>All Owners</h2>
+		<h2>Your Visit History</h2>
 		<p></p>                        
-  <table class="tablesorter table table-bordered" id="owners">
+  <table class="tablesorter table table-bordered" id="visit_items">
     <thead>
       <tr>
         <th></th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Number of Properties</th>
+        <th>Name</th>
+        <th>Date Logged</th>
+        <th>Rating</th>
       </tr>
     </thead>
     <tbody>
     <% if (results) { %>
     <% for (i = 0; i < results.length; i+=1) { %>
         <tr>
-            <td><a href="deleteOwner?username=<%=results[i].username%>">Delete Account</a></td>
-            <td><%= results[i].username %></td>
-            <td><%= results[i].email %></td>
-            <td><%= results[i].num_props %></td>
+            <td><a href="viewVisitProperty?id=<%=results[i].property_id%>">View</a></td>
+            <td><%= results[i].name %></td>
+            <td><%= results[i].visit_date %></td>
+            <td><%= results[i].rating %></td>
         </tr>
     <% } } %>
     </tbody>
   </table>
 </div>
 		
-<form action="/searchOwners" method="POST">
-    <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
-            <select id="sel_searchterm" class="form-control" id="sel_searchattribute" name="searchattribute">
-                <option>Username</option>  
-                <option>Email</option>
-            </select>
-        </button>
-    </div>
-    <div class="form-group">
-        <label for="searchterm">Enter Search Term:</label>
-        <input type="text" class="form-control" id="searchterm" name="searchterm">
-        <button type="submit" class="btn btn-primary">Search Owners</button>
-    </div>
-</form>
-	
-	
-	
-	
-	
 	<div class="container">
-	<a href='/main/Admin' type="button" class="btn btn-primary">Back</a>
+	<a href='/main/Visitor' type="button" class="btn btn-primary">Back</a>
   </div>
   
 	<style>
@@ -103,7 +82,7 @@
 	<p> <a href="https://www.cc.gatech.edu">College of Computing at GA Tech</a></p> 
 </footer>
 <script src="/public/scripts/jquery.tablesorter.js"></script>
-<script>$('#owners').tablesorter();</script>
+<script>$('#visit_items').tablesorter();</script>
 </body>
 </html>
 

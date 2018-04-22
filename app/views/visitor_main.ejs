@@ -40,7 +40,7 @@
         </div>
         <div class="container-fluid bg-1 text-center">
             <h2>Welcome <%= username %></h2>
-            <h3>Other Owners' Properties:</h3>
+            <h2>All Public, Validated Properties</h2>
             <table id="properties" class="tablesorter table table-bordered">
                 <thead>
                     <tr>
@@ -62,7 +62,7 @@
                 <% for (i = 0; i < results.length; i+=1) { %>
                     <tr>
                         <% prow = results[i]; %>
-                        <td><a href='/viewProperty?id=<%= prow.id %>'>View Details</a></td>
+                        <td><a href='/viewVisitProperty?id=<%= prow.id %>'>View</a></td>
                         <td><%= prow.name %></td>
                         <td><%= prow.street %></td>
                         <td><%= prow.city %></td>
@@ -91,7 +91,7 @@
                 </tbody>
             </table>
         </div>
-        <form action="/viewOtherProperties" method="POST">
+        <form action="/main/Visitor" method="POST">
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search By
                     <select id="sel_searchterm" class="form-control" id="sel_searchattribute" name="searchattribute">
@@ -118,7 +118,8 @@
         <div class="container">
             <h2>Other Options</h2>
             <div class="btn-group btn-group-lg">
-                <a href="/main/Owner" type="button" class="btn btn-primary">Back</a>
+                <a href="/viewVisitHistory" type="button" class="btn btn-primary">View Visit History</a>
+                <a href="/logout" type="button" class="btn btn-primary">Log Out</a>
             </div>
         </div>
         <style>
@@ -133,6 +134,6 @@
             <p> <a href="https://www.cc.gatech.edu">College of Computing at GA Tech</a></p> 
         </footer>
         <script src="/public/scripts/jquery.tablesorter.js"></script>
-        <script src="/public/scripts/scriptownermain.js"></script>
+        <script>$('#properties').tablesorter();</script>
     </body>
 </html>
