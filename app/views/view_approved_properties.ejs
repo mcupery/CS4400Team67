@@ -78,7 +78,7 @@
                         <% } else { %>
                             <td>True</td>
                         <% } %>                        
-                        <td><%= prow.id %></td>
+                        <td><%= (prow.id).toString().padStart(5, '0') %></td>
                         <td><%= prow.approved_by %></td>
                         <% if (prow.avg_rating === null) { %>
                             <td>N/A</td>

@@ -56,7 +56,7 @@
             <label for="proptype">Type: </label><p id="proptype"> <%= prop.property_type %></p>
             <label for="proppublic">Public: </label><p id="proppublic"> <%= prop.is_public == true ? "Yes" : "No" %></p>
             <label for="propcommercial">Commercial</label><p id="propcommercial"> <%= prop.is_commercial == true ? "Yes" : "No" %></p>
-            <label for="propid">ID: </label><p id="propid"> <%= prop.id %></p>
+            <label for="propid">ID: </label><p id="propid"> <%= (prop.id).toString().padStart(5, '0') %></p>
             <label for="propvisits">Visits: </label><p id="propvisits"> <%= prop.num_visits %></p>
             <label for="proprating">Average Rating: </label><p id="proprating"> <%= prop.avg_rating == null ? "N/A" : prop.avg_rating %></p>
         </div>

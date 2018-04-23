@@ -46,7 +46,7 @@
         <h3>Manage Property</h3>
         <% var prop = info[0]; %>
         <form action='/manageProperty?id=<%=prop.id%>' method="POST" id='ownerForm'>	        
-            <h4>Property ID: <span><%= prop.id %></span></h4>
+            <h4>Property ID: <span><%= (prop.id).toString().padStart(5, '0') %></span></h4>
             <h4>Property Type: <span id="proptype" name="proptype"><%= prop.property_type %></span></h4>
             <div class="form-group">
                 <label for="propertyname">Property Name:</label>

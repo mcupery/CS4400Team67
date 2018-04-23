@@ -80,7 +80,7 @@
                         <% } else { %>
                             <td>True</td>
                         <% } %>                        
-                        <td><%= prow.id %></td>
+                        <td><%= (prow.id).toString().padStart(5, '0') %></td>
                         <% if (prow.is_approved === null) { %>
                             <td>False</td>
                         <% } else { %>
